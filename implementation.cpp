@@ -12,7 +12,7 @@ double lineType::slope(double a, double b, double c) {
     if (nonVertical(b)) {
         return -(a / b);
     } else {
-        return 0;             
+        return NAN;             
     }
 }
 

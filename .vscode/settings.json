@@ -3,6 +3,8 @@
         "*.js": "javascript",
         "iostream": "cpp",
         "fstream": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "*.tcc": "cpp",
+        "string": "cpp"
     }
 }

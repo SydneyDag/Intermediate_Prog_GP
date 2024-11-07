@@ -1,6 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <string>
+#include <sstream>
+#include <cctype>
 #include "implementation.cpp"
 using namespace std;
 
@@ -86,7 +89,6 @@ void findShape(vector<lineType> &lines)
 int main()
 {
     string filename = "data.txt";
-
     ifstream inputFile(filename);
 
     if (!inputFile.is_open())
@@ -98,13 +100,35 @@ int main()
     double a, b, c;
     vector<lineType> lines;
     int lineCounter = 0;
+    string line;
 
-    while (inputFile >> a >> b >> c)
+    while (getline(inputFile, line))
     {
-        // Read the 4 lines and then call findShape function for each set of 4
-        lineType line(a, b, c);
-        lines.push_back(line);
-        lineCounter++;
+        // Check if the line contains any alphabetic characters
+        bool hasAlpha = false;
+        for (char ch : line)
+        {
+            if (isalpha(ch))
+            {
+                hasAlpha = true;
+                break;
+            }
+        }
+
+        // Skip this line if it contains alphabetic characters
+        if (hasAlpha)
+        {
+            continue;
+        }
+
+        // Now parse the line into a, b, and c
+        istringstream iss(line);
+        if (iss >> a >> b >> c)
+        {
+            lineType lineObj(a, b, c);
+            lines.push_back(lineObj);
+            lineCounter++;
+        }
 
         // Process each set of 4 lines as a quadrilateral
         if (lineCounter == 4)
@@ -113,6 +137,12 @@ int main()
             lines.clear();
             lineCounter = 0;
         }
+    }
+
+    // Handle any remaining lines that didn't form a complete set of 4
+    if (!lines.empty())
+    {
+        findShape(lines);
     }
 
     inputFile.close();
